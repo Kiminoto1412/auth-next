@@ -29,10 +29,12 @@ export const authOptions: NextAuthOptions = {
         username: {
           label: "Username",
           type: "text",
-          placeholder: "jsmith",
+          placeholder: "Enter your username.",
         },
         password: { label: "Password", type: "password" },
       },
+
+      // after click submit button that will do this async function
       async authorize(credentials, req) {
         if (!credentials?.username || !credentials?.password) return null;
         const { username, password } = credentials;
@@ -47,7 +49,7 @@ export const authOptions: NextAuthOptions = {
           },
         });
         if (res.status == 401) {
-          console.log(res.statusText);
+          console.log("\n\n\nres.statusText", res.statusText, "\n\n\n");
 
           return null;
         }
@@ -57,23 +59,28 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
+  // performed when user sign in and then callback will do
   callbacks: {
+    // jwt callback will be called and it recieve token and user,the last will return token
     async jwt({ token, user }) {
+      console.log("\n\n\nuser", user, "\n\n\n");
       if (user) return { ...token, ...user };
 
-      if (new Date().getTime() < token.backendTokens.expiresIn)
-        return token;
+      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
 
       return await refreshToken(token);
     },
 
+    // every time when this session will be get by useSession or get server session func
+    // session callback will recieve data from token of jwt callback
     async session({ token, session }) {
       session.user = token.user;
       session.backendTokens = token.backendTokens;
-
+      console.log("\n\n\n session", session, "\n\n\n");
       return session;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);

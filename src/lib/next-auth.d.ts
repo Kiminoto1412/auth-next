@@ -1,3 +1,4 @@
+// create interface for session becaue that should have structure as backend
 import NextAuth from "next-auth";
 
 declare module "next-auth" {
@@ -16,6 +17,7 @@ declare module "next-auth" {
   }
 }
 
+// change type of jwt from next-auth
 import { JWT } from "next-auth/jwt";
 
 declare module "next-auth/jwt" {
