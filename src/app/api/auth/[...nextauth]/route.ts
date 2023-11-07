@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // jwt callback will be called and it recieve token and user,the last will return token
     async jwt({ token, user }) {
-      console.log("\n\n\nuser", user, "\n\n\n");
+      // console.log("\n\n\nuser", user, "\n\n\n");
       if (user) return { ...token, ...user };
 
       if (new Date().getTime() < token.backendTokens.expiresIn) return token;
@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
     async session({ token, session }) {
       session.user = token.user;
       session.backendTokens = token.backendTokens;
-      console.log("\n\n\n session", session, "\n\n\n");
+      // console.log("\n\n\n session", session, "\n\n\n");
       return session;
     },
   },
